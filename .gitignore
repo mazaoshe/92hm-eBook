@@ -1,0 +1,25 @@
+# Binaries
+comicbox
+92hm-eBook
+comi
+pack
+ebook
+
+# Downloaded content
+*_files/
+*_[0-9][0-9][0-9]*/
+秘密*/
+色輪*/
+初戀*/
+
+# Log files
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

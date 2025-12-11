@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>系统发生错误</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <style>
+        /* Base */
+        body {
+            color: #333;
+            font: 16px Verdana, "Helvetica Neue", helvetica, Arial, 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 0 20px 20px;
+        }
+        h1{
+            margin: 10px 0 0;
+            font-size: 28px;
+            font-weight: 500;
+            line-height: 32px;
+        }
+        h2{
+            color: #4288ce;
+            font-weight: 400;
+            padding: 6px 0;
+            margin: 6px 0 0;
+            font-size: 18px;
+            border-bottom: 1px solid #eee;
+        }
+        h3{
+            margin: 12px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        abbr{
+            cursor: help;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+        }
+        a{
+            color: #868686;
+            cursor: pointer;
+        }
+        a:hover{
+            text-decoration: underline;
+        }
+        .line-error{
+            background: #f8cbcb;
+        }
+
+        .echo table {
+            width: 100%;
+        }
+
+        .echo pre {
+            padding: 16px;
+            overflow: auto;
+            font-size: 85%;
+            line-height: 1.45;
+            background-color: #f7f7f7;
+            border: 0;
+            border-radius: 3px;
+            font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+        }
+
+        .echo pre > pre {
+            padding: 0;
+            margin: 0;
+        }
+    
+        /* Exception Info */
+        .exception {
+            margin-top: 20px;
+        }
+        .exception .message{
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-bottom: 0 none;
+            line-height: 18px;
+            font-size:16px;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            font-family: Consolas,"Liberation Mono",Courier,Verdana,"微软雅黑";
+        }
+
+        .exception .code{
+            float: left;
+            text-align: center;
+            color: #fff;
+            margin-right: 12px;
+            padding: 16px;
+            border-radius: 4px;
+            background: #999;
+        }
+        .exception .source-code{
+            padding: 6px;
+            border: 1px solid #ddd;
+
+            background: #f9f9f9;
+            overflow-x: auto;
+
+        }
+        .exception .source-code pre{
+            margin: 0;
+        }
+        .exception .source-code pre ol{
+            margin: 0;
+            color: #4288ce;
+            display: inline-block;
+            min-width: 100%;
+            box-sizing: border-box;
+        font-size:14px;
+            font-family: "Century Gothic",Consolas,"Liberation Mono",Courier,Verdana;
+            padding-left: 48px;
+        }
+        .exception .source-code pre li{
+            border-left: 1px solid #ddd;
+            height: 18px;
+            line-height: 18px;
+        }
+        .exception .source-code pre code{
+            color: #333;
+            height: 100%;
+            display: inline-block;
+            border-left: 1px solid #fff;
+        font-size:14px;
+            font-family: Consolas,"Liberation Mono",Courier,Verdana,"微软雅黑";
+        }
+        .exception .trace{
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-top: 0 none;
+            line-height: 16px;
+        font-size:14px;
+            font-family: Consolas,"Liberation Mono",Courier,Verdana,"微软雅黑";
+        }
+        .exception .trace ol{
+            margin: 12px;
+        }
+        .exception .trace ol li{
+            padding: 2px 4px;
+        }
+        .exception div:last-child{
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+
+        /* Exception Variables */
+        .exception-var table{
+            width: 100%;
+            margin: 12px 0;
+            box-sizing: border-box;
+            table-layout:fixed;
+            word-wrap:break-word;            
+        }
+        .exception-var table caption{
+            text-align: left;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 6px 0;
+        }
+        .exception-var table caption small{
+            font-weight: 300;
+            display: inline-block;
+            margin-left: 10px;
+            color: #ccc;
+        }
+        .exception-var table tbody{
+            font-size: 13px;
+            font-family: Consolas,"Liberation Mono",Courier,"微软雅黑";
+        }
+        .exception-var table td{
+            padding: 0 6px;
+            vertical-align: top;
+            word-break: break-all;
+        }
+        .exception-var table td:first-child{
+            width: 28%;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .exception-var table td pre{
+            margin: 0;
+        }
+
+        /* Copyright Info */
+        .copyright{
+            margin-top: 24px;
+            padding: 12px 0;
+            border-top: 1px solid #eee;
+        }
+
+        /* SPAN elements with the classes below are added by prettyprint. */
+        pre.prettyprint .pln { color: #000 }  /* plain text */
+        pre.prettyprint .str { color: #080 }  /* string content */
+        pre.prettyprint .kwd { color: #008 }  /* a keyword */
+        pre.prettyprint .com { color: #800 }  /* a comment */
+        pre.prettyprint .typ { color: #606 }  /* a type name */
+        pre.prettyprint .lit { color: #066 }  /* a literal value */
+        /* punctuation, lisp open bracket, lisp close bracket */
+        pre.prettyprint .pun, pre.prettyprint .opn, pre.prettyprint .clo { color: #660 }
+        pre.prettyprint .tag { color: #008 }  /* a markup tag name */
+        pre.prettyprint .atn { color: #606 }  /* a markup attribute name */
+        pre.prettyprint .atv { color: #080 }  /* a markup attribute value */
+        pre.prettyprint .dec, pre.prettyprint .var { color: #606 }  /* a declaration; a variable name */
+        pre.prettyprint .fun { color: red }  /* a function name */
+    </style>
+</head>
+<body>
+    <div class="echo">
+                                            </div>
+        <div class="exception">
+    <div class="message">
+        
+            <div class="info">
+                <div>
+                    <h2>[0]&nbsp;<abbr title="think\exception\HttpException">HttpException</abbr> in <a class="toggle" title="/www/wwwroot/main.com/thinkphp/library/think/route/dispatch/Module.php line 62">Module.php line 62</a></h2>
+                </div>
+                <div><h1>模块不存在:comic</h1></div>
+            </div>
+        
+    </div>
+	        <div class="source-code">
+            <pre class="prettyprint lang-php"><ol start="53"><li class="line-53"><code>                $available = true;
+</code></li><li class="line-54"><code>            }
+</code></li><li class="line-55"><code>
+</code></li><li class="line-56"><code>            // 模块初始化
+</code></li><li class="line-57"><code>            if ($module &amp;&amp; $available) {
+</code></li><li class="line-58"><code>                // 初始化模块
+</code></li><li class="line-59"><code>                $this-&gt;request-&gt;setModule($module);
+</code></li><li class="line-60"><code>                $this-&gt;app-&gt;init($module);
+</code></li><li class="line-61"><code>            } else {
+</code></li><li class="line-62"><code>                throw new HttpException(404, 'module not exists:' . $module);
+</code></li><li class="line-63"><code>            }
+</code></li><li class="line-64"><code>        }
+</code></li><li class="line-65"><code>
+</code></li><li class="line-66"><code>        // 是否自动转换控制器和操作名
+</code></li><li class="line-67"><code>        $convert = is_bool($this-&gt;convert) ? $this-&gt;convert : $this-&gt;rule-&gt;getConfig('url_convert');
+</code></li><li class="line-68"><code>        // 获取控制器名
+</code></li><li class="line-69"><code>        $controller = strip_tags($result[1] ?: $this-&gt;rule-&gt;getConfig('default_controller'));
+</code></li><li class="line-70"><code>
+</code></li><li class="line-71"><code>        $this-&gt;controller = $convert ? strtolower($controller) : $controller;
+</code></li></ol></pre>
+        </div>
+	        <div class="trace">
+            <h2>Call Stack</h2>
+            <ol>
+                <li>in <a class="toggle" title="/www/wwwroot/main.com/thinkphp/library/think/route/dispatch/Module.php line 62">Module.php line 62</a></li>
+                                <li>
+                at <abbr title="think\route\dispatch\Module">Module</abbr>->init() in <a class="toggle" title="/www/wwwroot/main.com/thinkphp/library/think/route/dispatch/Url.php line 25">Url.php line 25</a>                </li>
+                                <li>
+                at <abbr title="think\route\dispatch\Url">Url</abbr>->init() in <a class="toggle" title="/www/wwwroot/main.com/thinkphp/library/think/App.php line 402">App.php line 402</a>                </li>
+                                <li>
+                at <abbr title="think\App">App</abbr>->run() in <a class="toggle" title="/www/wwwroot/main.com/public/index.php line 21">index.php line 21</a>                </li>
+                            </ol>
+        </div>
+    </div>
+        
+    
+        <div class="exception-var">
+        <h2>Environment Variables</h2>
+                <table>
+                        <caption>GET Data<small>empty</small></caption>
+                    </table>
+                <table>
+                        <caption>POST Data<small>empty</small></caption>
+                    </table>
+                <table>
+                        <caption>Files<small>empty</small></caption>
+                    </table>
+                <table>
+                        <caption>Cookies<small>empty</small></caption>
+                    </table>
+                <table>
+                        <caption>Session<small>empty</small></caption>
+                    </table>
+                <table>
+                        <caption>Server/Request Data</caption>
+            <tbody>
+                                <tr>
+                    <td>USER</td>
+                    <td>
+                        www                    </td>
+                </tr>
+                                <tr>
+                    <td>HOME</td>
+                    <td>
+                        /home/www                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_ACCEPT_ENCODING</td>
+                    <td>
+                        gzip, br                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_X_FORWARDED_PROTO</td>
+                    <td>
+                        https                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_CF_VISITOR</td>
+                    <td>
+                        {&quot;scheme&quot;:&quot;https&quot;}                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_CF_IPCOUNTRY</td>
+                    <td>
+                        AU                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_CF_CONNECTING_IP</td>
+                    <td>
+                        2a11:3:200::10f0                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_CDN_LOOP</td>
+                    <td>
+                        cloudflare; loops=1                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_ACCEPT</td>
+                    <td>
+                        text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_CF_RAY</td>
+                    <td>
+                        9abaec73ad7daaff-SYD                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_USER_AGENT</td>
+                    <td>
+                        Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_CONNECTION</td>
+                    <td>
+                        close                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_REMOTE_HOST</td>
+                    <td>
+                        162.158.168.135                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_X_FORWARDED_FOR</td>
+                    <td>
+                        2a11:3:200::10f0, 162.158.168.135                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_X_REAL_IP</td>
+                    <td>
+                        162.158.168.135                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTP_HOST</td>
+                    <td>
+                        d.92hm.life                    </td>
+                </tr>
+                                <tr>
+                    <td>PATH_INFO</td>
+                    <td>
+                                            </td>
+                </tr>
+                                <tr>
+                    <td>REDIRECT_STATUS</td>
+                    <td>
+                        200                    </td>
+                </tr>
+                                <tr>
+                    <td>SERVER_NAME</td>
+                    <td>
+                        d.92hm.life                    </td>
+                </tr>
+                                <tr>
+                    <td>SERVER_PORT</td>
+                    <td>
+                        443                    </td>
+                </tr>
+                                <tr>
+                    <td>SERVER_ADDR</td>
+                    <td>
+                        162.251.161.133                    </td>
+                </tr>
+                                <tr>
+                    <td>REMOTE_PORT</td>
+                    <td>
+                        43612                    </td>
+                </tr>
+                                <tr>
+                    <td>REMOTE_ADDR</td>
+                    <td>
+                        195.170.172.22                    </td>
+                </tr>
+                                <tr>
+                    <td>SERVER_SOFTWARE</td>
+                    <td>
+                        nginx/1.24.0                    </td>
+                </tr>
+                                <tr>
+                    <td>GATEWAY_INTERFACE</td>
+                    <td>
+                        CGI/1.1                    </td>
+                </tr>
+                                <tr>
+                    <td>HTTPS</td>
+                    <td>
+                        on                    </td>
+                </tr>
+                                <tr>
+                    <td>REQUEST_SCHEME</td>
+                    <td>
+                        https                    </td>
+                </tr>
+                                <tr>
+                    <td>SERVER_PROTOCOL</td>
+                    <td>
+                        HTTP/1.1                    </td>
+                </tr>
+                                <tr>
+                    <td>DOCUMENT_ROOT</td>
+                    <td>
+                        /www/wwwroot/main.com/public                    </td>
+                </tr>
+                                <tr>
+                    <td>DOCUMENT_URI</td>
+                    <td>
+                        /index.php                    </td>
+                </tr>
+                                <tr>
+                    <td>REQUEST_URI</td>
+                    <td>
+                        /comic/418                    </td>
+                </tr>
+                                <tr>
+                    <td>SCRIPT_NAME</td>
+                    <td>
+                        /index.php                    </td>
+                </tr>
+                                <tr>
+                    <td>CONTENT_LENGTH</td>
+                    <td>
+                                            </td>
+                </tr>
+                                <tr>
+                    <td>CONTENT_TYPE</td>
+                    <td>
+                                            </td>
+                </tr>
+                                <tr>
+                    <td>REQUEST_METHOD</td>
+                    <td>
+                        GET                    </td>
+                </tr>
+                                <tr>
+                    <td>QUERY_STRING</td>
+                    <td>
+                        s=//comic/418                    </td>
+                </tr>
+                                <tr>
+                    <td>SCRIPT_FILENAME</td>
+                    <td>
+                        /www/wwwroot/main.com/public/index.php                    </td>
+                </tr>
+                                <tr>
+                    <td>FCGI_ROLE</td>
+                    <td>
+                        RESPONDER                    </td>
+                </tr>
+                                <tr>
+                    <td>PHP_SELF</td>
+                    <td>
+                        /index.php                    </td>
+                </tr>
+                                <tr>
+                    <td>REQUEST_TIME_FLOAT</td>
+                    <td>
+                        1765350639.8052                    </td>
+                </tr>
+                                <tr>
+                    <td>REQUEST_TIME</td>
+                    <td>
+                        1765350639                    </td>
+                </tr>
+                            </tbody>
+                    </table>
+                <table>
+                        <caption>Environment Variables<small>empty</small></caption>
+                    </table>
+                <table>
+                        <caption>ThinkPHP Constants</caption>
+            <tbody>
+                                <tr>
+                    <td>BOOKCTRL</td>
+                    <td>
+                        book                    </td>
+                </tr>
+                                <tr>
+                    <td>CHAPTERCTRL</td>
+                    <td>
+                        chapter                    </td>
+                </tr>
+                                <tr>
+                    <td>TAGCTRL</td>
+                    <td>
+                        tag                    </td>
+                </tr>
+                                <tr>
+                    <td>BOOKLISTACT</td>
+                    <td>
+                        booklist                    </td>
+                </tr>
+                                <tr>
+                    <td>SEARCHCTRL</td>
+                    <td>
+                        search                    </td>
+                </tr>
+                                <tr>
+                    <td>RANKCTRL</td>
+                    <td>
+                        rank                    </td>
+                </tr>
+                                <tr>
+                    <td>UPDATEACT</td>
+                    <td>
+                        update                    </td>
+                </tr>
+                                <tr>
+                    <td>AUTHORCTRL</td>
+                    <td>
+                        author                    </td>
+                </tr>
+                                <tr>
+                    <td>spider_db_conn</td>
+                    <td>
+                        xxx                    </td>
+                </tr>
+                                <tr>
+                    <td>PINYIN_DEFAULT</td>
+                    <td>
+                        4096                    </td>
+                </tr>
+                                <tr>
+                    <td>PINYIN_TONE</td>
+                    <td>
+                        2                    </td>
+                </tr>
+                                <tr>
+                    <td>PINYIN_NO_TONE</td>
+                    <td>
+                        4                    </td>
+                </tr>
+                                <tr>
+                    <td>PINYIN_ASCII_TONE</td>
+                    <td>
+                        8                    </td>
+                </tr>
+                                <tr>
+                    <td>PINYIN_NAME</td>
+                    <td>
+                        16                    </td>
+                </tr>
+                                <tr>
+                    <td>PINYIN_KEEP_NUMBER</td>
+                    <td>
+                        32                    </td>
+                </tr>
+                                <tr>
+                    <td>PINYIN_KEEP_ENGLISH</td>
+                    <td>
+                        64                    </td>
+                </tr>
+                                <tr>
+                    <td>PINYIN_UMLAUT_V</td>
+                    <td>
+                        128                    </td>
+                </tr>
+                                <tr>
+                    <td>PINYIN_KEEP_PUNCTUATION</td>
+                    <td>
+                        256                    </td>
+                </tr>
+                            </tbody>
+                    </table>
+            </div>
+    
+    <div class="copyright">
+        <a title="官方网站" href="http://www.thinkphp.cn">ThinkPHP</a> 
+        <span>V5.1.39 LTS</span> 
+        <span>{ 十年磨一剑-为API开发设计的高性能框架 }</span>
+    </div>
+        <script>
+        var LINE = 62;
+
+        function $(selector, node){
+            var elements;
+
+            node = node || document;
+            if(document.querySelectorAll){
+                elements = node.querySelectorAll(selector);
+            } else {
+                switch(selector.substr(0, 1)){
+                    case '#':
+                        elements = [node.getElementById(selector.substr(1))];
+                        break;
+                    case '.':
+                        if(document.getElementsByClassName){
+                            elements = node.getElementsByClassName(selector.substr(1));
+                        } else {
+                            elements = get_elements_by_class(selector.substr(1), node);
+                        }
+                        break;
+                    default:
+                        elements = node.getElementsByTagName();
+                }
+            }
+            return elements;
+
+            function get_elements_by_class(search_class, node, tag) {
+                var elements = [], eles, 
+                    pattern  = new RegExp('(^|\\s)' + search_class + '(\\s|$)');
+
+                node = node || document;
+                tag  = tag  || '*';
+
+                eles = node.getElementsByTagName(tag);
+                for(var i = 0; i < eles.length; i++) {
+                    if(pattern.test(eles[i].className)) {
+                        elements.push(eles[i])
+                    }
+                }
+
+                return elements;
+            }
+        }
+
+        $.getScript = function(src, func){
+            var script = document.createElement('script');
+            
+            script.async  = 'async';
+            script.src    = src;
+            script.onload = func || function(){};
+            
+            $('head')[0].appendChild(script);
+        }
+
+        ;(function(){
+            var files = $('.toggle');
+            var ol    = $('ol', $('.prettyprint')[0]);
+            var li    = $('li', ol[0]);   
+
+            // 短路径和长路径变换
+            for(var i = 0; i < files.length; i++){
+                files[i].ondblclick = function(){
+                    var title = this.title;
+
+                    this.title = this.innerHTML;
+                    this.innerHTML = title;
+                }
+            }
+
+            // 设置出错行
+            var err_line = $('.line-' + LINE, ol[0])[0];
+            err_line.className = err_line.className + ' line-error';
+
+            $.getScript('//cdn.bootcss.com/prettify/r298/prettify.min.js', function(){
+                prettyPrint();
+
+                // 解决Firefox浏览器一个很诡异的问题
+                // 当代码高亮后，ol的行号莫名其妙的错位
+                // 但是只要刷新li里面的html重新渲染就没有问题了
+                if(window.navigator.userAgent.indexOf('Firefox') >= 0){
+                    ol[0].innerHTML = ol[0].innerHTML;
+                }
+            });
+
+        })();
+    </script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"79ef6269219f4063b96fe6176b89e6af","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
