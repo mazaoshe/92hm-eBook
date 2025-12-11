@@ -1,6 +1,6 @@
-# ComicBox - 漫画下载工具
+# 92hm-eBook - 漫画下载工具
 
-ComicBox 是一个用于从 92hm.life 网站下载漫画的工具，支持下载单个章节或整个漫画系列，并可以将下载的章节打包为标准的CBZ格式或整合为单一电子书文件。
+92hm-eBook 是一个用于从 92hm.life 网站下载漫画的工具，支持下载单个章节或整个漫画系列，并可以将下载的章节打包为标准的CBZ格式或整合为单一电子书文件。
 
 ## 功能特点
 
@@ -22,10 +22,10 @@ ComicBox 是一个用于从 92hm.life 网站下载漫画的工具，支持下载
 ```bash
 # 克隆仓库
 git clone <repository-url>
-cd comicbox
+cd 92hm-eBook
 
 # 编译主程序
-go build -o comicbox .
+go build -o 92hm-eBook .
 
 # 编译打包工具
 go build -o pack tools/pack.go
@@ -39,32 +39,32 @@ go build -o ebook tools/ebook.go
 #### 下载单个章节
 ```bash
 # 下载章节 16124
-./comicbox 16124
+./92hm-eBook 16124
 
 # 使用代理下载
 export https_proxy=http://127.0.0.1:7897 http_proxy=http://127.0.0.1:7897 all_proxy=socks5://127.0.0.1:7897
-./comicbox 16124
+./92hm-eBook 16124
 
 # 从本地 HTML 文件下载单章节（测试用）
-./comicbox --local hm_page.html
+./92hm-eBook --local hm_page.html
 ```
 
 #### 下载整个漫画系列
 ```bash
 # 下载漫画系列 418 的所有章节
-./comicbox --series 418
+./92hm-eBook --series 418
 
 # 从章节 16130 开始下载漫画系列 418
-./comicbox --series 418 --start 16130
+./92hm-eBook --series 418 --start 16130
 
 # 从本地目录文件下载整个漫画系列（测试用）
-./comicbox --local-series sample_toc.html
+./92hm-eBook --local-series sample_toc.html
 ```
 
 #### 调试模式
 ```bash
 # 使用调试模式查看更多详细信息
-./comicbox --debug 16124
+./92hm-eBook --debug 16124
 ```
 
 ### 文件组织结构
